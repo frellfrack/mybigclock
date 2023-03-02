@@ -43,11 +43,11 @@ class base_object:
         self.colour, 
         cords
         )
-
-    
+   
 class myBigClock:
+
     def __init__(self):
-        #self.printFonts()
+        self.printFonts()
         pygame.init()
         self.width=800
         self.height=600
@@ -59,8 +59,8 @@ class myBigClock:
         self.done=False
         pygame.display.set_caption("My Big Clock")
         self.background=(0,0,0)
-        self.labelColour=(255,255,255) 
-        #self.ship =  ship(self.centreX,self.centreY)
+        self.labelColour=(255,255,255)  
+        self.prevSec = 0
         self.hourHand = base_object([
         [-140,-10],
         [-150,0],
@@ -87,30 +87,62 @@ class myBigClock:
         [-200,-10],
         [-250,-0],
         [-200,10],
-        [10,5],
-        [10,-5] 
+        [0,5],
+        [0,-5] 
         ],
         self.centreX,
         self.centreY,
         (255,255,255))
-        self.font = pygame.font.SysFont('Calibri', 30, True, False)
+        self.font = pygame.font.SysFont('dejavuserif', 30, True, False)
         self.numerals=[
         "XII ",
         " I  ",
-        "II  ",
-        "III ",
+        " II ",
+        " III",
         "IIII",      
-        " V  ",
+        "  V ",
         " VI ",
         "VII ",
         "VIII",
-        "IX  ",
-        " X  ",
-        "XI  "
+        "  IX",
+        "  X ",
+        "  XI"
         ]
 
-
+        
         self.mainLoop()
+
+    def mainLoop(self):
+        while not self.done:
+            self.getEvents()
+            
+            now = datetime.now()
+            if( now.second != self.prevSec):
+                self.clock.tick()            
+                self.screen.fill(self.background)
+           
+                self.drawDial(12,280,10)
+                self.drawDial(60,280,5)
+                self.drawNumerals(240)
+                now = datetime.now()
+                if (now.hour>12):
+                    self.hourHand.angle = (now.hour-12) * 30 + (now.minute * 0.5) + (now.second * 0.00833333333) + 90
+                else:
+                    self.hourHand.angle =(now.hour * 30) + (now.minute * 0.5) + (now.second * 0.00833333333) + 90
+                self.minuteHand.angle = (now.minute * 6) + (now.second * 0.1) + 90
+                self.secondHand.angle = (now.second * 6) + 90
+
+                self.hourHand.rotateNodes()
+                self.minuteHand.rotateNodes()
+                self.secondHand.rotateNodes()
+                               
+                self.hourHand.drawObject(self.screen)
+                self.minuteHand.drawObject(self.screen)
+                self.secondHand.drawObject(self.screen)
+                #pygame.draw.circle(self.screen, (255,255,255), (self.centreX,self.centreY), 20)
+                pygame.display.flip()
+                self.hourHand.angle = self.hourHand.angle + 1
+                self.prevSec =now.second
         
     def drawDial(self,numitems,dialRadius,dotRadius):
     
@@ -120,44 +152,15 @@ class myBigClock:
             x = self.centreX - dialRadius * cos((i*360/numitems) * pi/180)    
             y = self.centreY - dialRadius * sin((i*360/numitems) * pi/180)
             pygame.draw.circle(self.screen, (255,255,255), (x,y), dotRadius)
-            
-            
+                     
     def drawNumerals(self,dialRadius):
         for i in range(0, 12,1):
             x = self.centreX - dialRadius * cos(((i-3)*360/12+2700) * pi/180)    
             y = self.centreY - dialRadius * sin(((i-3)*360/12+2700) * pi/180) 
             text = self.font.render(self.numerals[i], True, (255,255,255))
             text = pygame.transform.rotate(text, i*-30)
-            self.screen.blit(text, [x-20, y-20])      
-             
-    def mainLoop(self):
-        while not self.done:
-            self.getEvents()
-            self.clock.tick()
-            self.screen.fill(self.background)
-            self.drawDial(12,280,10)
-            self.drawDial(60,280,5)
-            #self.drawNumerals(230)
-            now = datetime.now()
-            if (now.hour>12):
-                self.hourHand.angle = (now.hour-12) * 30 + (now.minute * 0.5) + (now.second * 0.00833333333) + 90
-            else:
-                self.hourHand.angle =(now.hour * 30) + (now.minute * 0.5) + (now.second * 0.00833333333) + 90
-            self.minuteHand.angle = (now.minute * 6) + (now.second * 0.1) + 90
-            self.secondHand.angle = (now.second * 6) + 90
-
-            self.hourHand.rotateNodes()
-            self.minuteHand.rotateNodes()
-            self.secondHand.rotateNodes()
-            
-            
-            self.hourHand.drawObject(self.screen)
-            self.minuteHand.drawObject(self.screen)
-            self.secondHand.drawObject(self.screen)
-            pygame.display.flip()
-            self.hourHand.angle = self.hourHand.angle + 1
-            
-           
+            self.screen.blit(text, [x-25, y-20])      
+          
     def getEvents(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT: 
@@ -183,6 +186,8 @@ class myBigClock:
                 elif (event.key == pygame.K_RIGHT):
                     self.K_RIGHT=True
                     
+    def sinwv(self,t,frequency,offset,amp):
+        return sin(frequency*t+offset)*(amp-1)+amp;                
  
     def printFonts(self):
         fonts = pygame.font.get_fonts()
