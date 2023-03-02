@@ -144,14 +144,13 @@ class myBigClock:
                 self.hourHand.angle = self.hourHand.angle + 1
                 self.prevSec =now.second
         
-    def drawDial(self,numitems,dialRadius,dotRadius):
-    
-        cords =[]
-
-        for i in range(0, numitems,1):
-            x = self.centreX - dialRadius * cos((i*360/numitems) * pi/180)    
-            y = self.centreY - dialRadius * sin((i*360/numitems) * pi/180)
-            pygame.draw.circle(self.screen, (255,255,255), (x,y), dotRadius)
+      def drawNumerals(self,dialRadius):
+        for i in range(0, 12,1):
+            x = (self.centreX-25) - dialRadius * cos(((i-3)*360/12+2700) * pi/180)    
+            y = (self.centreY-25) - dialRadius * sin(((i-3)*360/12+2700) * pi/180) 
+            text = self.font.render(self.numerals[i], True, (255,255,255))
+            text = pygame.transform.rotate(text, i*-30)
+            self.screen.blit(text, [x, y])  
                      
     def drawNumerals(self,dialRadius):
         for i in range(0, 12,1):
