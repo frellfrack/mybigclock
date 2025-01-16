@@ -12,12 +12,10 @@ class myBigClock:
         self.options = options
         
         pygame.init()
-        self.width=self.options['width']
-        self.height=self.options['height']
-        
-        size = [self.width, self.height]
-        
-        self.screen = pygame.display.set_mode(size)
+        self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+        self.width = self.screen.get_width()
+        self.height = self.screen.get_height()
+
         
         self.centreX = self.width/2
         self.centreY = self.height/2
@@ -85,8 +83,8 @@ class myBigClock:
                
         self.drawNumerals(240)
         today = date.today()
-        self.drawLabel ((self.centreX,30),self.options["motto"],25)
-        self.drawLabel ((self.centreX,570),today.strftime(self.options["dateFormat"]),18)
+        self.drawLabel ((self.centreX,self.centreY-300),self.options["motto"],25)
+        self.drawLabel ((self.centreX,self.centreY+300),today.strftime(self.options["dateFormat"]),18)
         now = datetime.now()
         if (now.hour>12):
             self.hourHand.setAngle((now.hour-12) * 30 + (now.minute * 0.5) + (now.second * 0.00833333333) + 90)
