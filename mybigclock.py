@@ -175,7 +175,7 @@ if __name__ == "__main__":
     "title":"My Big Clock",
     "motto":"TEMPUS FUGIT",
     "dateFormat":"%A | %d-%B-%Y",
-    "background":(255,255,255),
+    "background":(150,150,150),
     "bgImage":"greek.svg",
     "labelColour":(0,0,0),
     "handColour":(0,0,0),
