@@ -61,6 +61,10 @@ class myBigClock:
         self.centreY,
         self.options['handColour'])
         
+        bg_width, bg_height = self.bgImg.get_size()
+        self.bg_x = (self.width - bg_width) // 2
+        self.bg_y = (self.height - bg_height) // 2
+
         self.numeralsFont = pygame.font.SysFont(self.options["font"], 25, True, False)
  
         self.mainLoop()
@@ -75,10 +79,7 @@ class myBigClock:
     def updateClock (self, now):
         self.clock.tick()   
         self.screen.fill(self.options['background'])
-        bg_width, bg_height = self.bgImg.get_size()
-        bg_x = (self.width - bg_width) // 2
-        bg_y = (self.height - bg_height) // 2
-        self.screen.blit(self.bgImg, (bg_x, bg_y))
+        self.screen.blit(self.bgImg, (self.bg_x, self.bg_y))
         
         self.drawDial(60,210,5,self.options['quarterColour']) 
         
