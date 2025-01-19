@@ -75,7 +75,10 @@ class myBigClock:
     def updateClock (self, now):
         self.clock.tick()   
         self.screen.fill(self.options['background'])
-        self.screen.blit(self.bgImg, (0,0))
+        bg_width, bg_height = self.bgImg.get_size()
+        bg_x = (self.width - bg_width) // 2
+        bg_y = (self.height - bg_height) // 2
+        self.screen.blit(self.bgImg, (bg_x, bg_y))
         
         self.drawDial(60,210,5,self.options['quarterColour']) 
         
