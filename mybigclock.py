@@ -155,13 +155,13 @@ class myBigClock:
                     self.K_RIGHT=True
             elif event.type == pygame.KEYUP:
                 if (event.key == pygame.K_UP):
-                    self.K_UP=True
+                    self.K_UP=False
                 elif (event.key == pygame.K_DOWN):
-                    self.K_DOWN=True
+                    self.K_DOWN=False
                 elif (event.key == pygame.K_LEFT):
-                    self.K_LEFT=True
+                    self.K_LEFT=False
                 elif (event.key == pygame.K_RIGHT):
-                    self.K_RIGHT=True
+                    self.K_RIGHT=False
  
     def printFonts(self):
         fonts = pygame.font.get_fonts()
